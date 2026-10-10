@@ -1,0 +1,34 @@
+// BetterGo example.
+//
+// Ternary, Python-style:  then if cond else other
+// Only the taken branch runs. It binds looser than +, == and &&.
+// Nesting is right-associative: a if c1 else b if c2 else c.
+// A real if statement on the next line stays an if statement.
+package main
+
+import "fmt"
+
+func boom() int {
+	panic("untaken branch must not run")
+}
+
+func pick(a int) int {
+	return 40 if a > 10 else 90
+}
+
+func main() {
+	sum := 40 if true else boom()
+	fmt.Println("short-circuit", sum)
+
+	fmt.Println("pick small", pick(3))
+	fmt.Println("pick big", pick(20))
+
+	var scaled float64 = 1 if sum > 10 else 2
+	fmt.Println("float", scaled)
+
+	label := "big" if sum > 50 else "mid" if sum > 10 else "small"
+	fmt.Println("nested", label)
+
+	fmt.Println("precedence", 1+2 if false else 10)
+	fmt.Println("argument", fmt.Sprintf("n=%d", 7 if sum > 0 else 0))
+}

@@ -1,0 +1,45 @@
+<idea-plugin>
+    <id>bettergo</id>
+    <name>BetterGo</name>
+    <vendor>BetterGo</vendor>
+    <description><![CDATA[
+        Language support for BetterGo (.bgo): Go plus a Python-style ternary.
+        Diagnostics, formatting and navigation come from the bettergo language server.
+        Debug uses Delve; //line directives map stops back to .bgo.
+        Install the bettergo binary (go install bettergo/cmd/bettergo@latest) so it is on PATH.
+    ]]></description>
+    <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.modules.xdebugger</depends>
+    <depends>com.intellij.modules.lsp</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <fileType name="BetterGo"
+                  implementationClass="bettergo.BetterGoFileType"
+                  fieldName="INSTANCE"
+                  language="BetterGo"
+                  extensions="bgo"/>
+        <lang.parserDefinition language="BetterGo"
+                               implementationClass="bettergo.BetterGoParserDefinition"/>
+        <lang.syntaxHighlighterFactory language="BetterGo"
+                                       implementationClass="bettergo.BetterGoSyntaxHighlighterFactory"/>
+        <runLineMarkerContributor language="BetterGo"
+                                  implementationClass="bettergo.BetterGoRunLineMarkerContributor"/>
+        <runConfigurationProducer implementation="bettergo.BetterGoRunConfigurationProducer"/>
+        <platform.lsp.serverSupportProvider implementation="bettergo.BetterGoLspProvider"/>
+        <configurationType implementation="bettergo.BetterGoRunConfigurationType"/>
+        <programRunner implementation="bettergo.BetterGoRunner"/>
+        <programRunner implementation="bettergo.BetterGoDebugRunner"/>
+        <xdebugger.breakpointType implementation="bettergo.BetterGoLineBreakpointType"/>
+        <treeStructureProvider implementation="bettergo.BetterGoTreeStructureProvider"/>
+    </extensions>
+
+    <actions>
+        <action id="BetterGo.HideGenerated"
+                class="bettergo.HideGeneratedGoAction"
+                text="Скрывать сгенерированные Go"
+                description="Прячет .go, рядом с которыми лежит одноимённый .bgo">
+            <add-to-group group-id="ProjectViewPopupMenu" anchor="last"/>
+            <add-to-group group-id="ViewMenu" anchor="last"/>
+        </action>
+    </actions>
+</idea-plugin>
